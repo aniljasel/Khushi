@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title >Happiness</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="cursor.css">
+</head>
+<body>
+    <div class="hearts-container"></div>
+    <div class="proposal-box">
+        <h1>Khushi, will you be the joy on my face!😊</h1>
+        <p>You can't escape this proposal! 😆</p>
+        <div class="buttons">
+            <button id="yesButton">YES ❤️</button>
+            <button id="noButton">NO 😆</button>
+        </div>
+        <p id="responseMessage"></p>
+    </div>
+    <script src="script.js"></script>
+
+    <canvas id="heartCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById("heartCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const hearts = [];
+
+        function createHeart(x, y) {
+            hearts.push({
+                x,
+                y,
+                size: Math.random() * 8 + 4,
+                size: Math.random() * 10 + 5,
+                opacity: Math.random() * 0.5 + 0.5,
+                speed: Math.random() * 2 + 1
+            });
+        }
+
+        function drawHeart(x, y, size, opacity) {
+            ctx.fillStyle = `rgba(210, 0, 0, ${opacity})`;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.bezierCurveTo(x + size, y - size * 0.8, x + size * 1.8, y + size / 3, x, y + size * 1.6);
+            ctx.bezierCurveTo(x - size * 1.8, y + size / 3, x - size, y - size * 0.8, x, y);
+            ctx.fill();
+        }
+
+        function updateHearts() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < hearts.length; i++) {
+                hearts[i].y += hearts[i].speed;
+                hearts[i].opacity -= 0.02;
+                drawHeart(hearts[i].x, hearts[i].y, hearts[i].size, hearts[i].opacity);
+            }
+            hearts.forEach((h, i) => {
+                if (h.opacity <= 0) hearts.splice(i, 1);
+            });
+            requestAnimationFrame(updateHearts);
+        }
+
+        document.addEventListener("mousemove", (event) => {
+            for (let i = 0; i < 1; i++) {
+                createHeart(event.clientX + (Math.random() * 1 - 1), event.clientY + (Math.random() * 1 - 1));
+            }
+        });
+
+        updateHearts();
+    </script>
+</body>
+</html>
